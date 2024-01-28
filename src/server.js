@@ -3,9 +3,12 @@ require("express-async-errors")
 const AppError = require("./utils/AppError")
 const express = require("express"); //importanto express 
 
+const cors = require("cors")
+
 const routes = require("./routes")
 
 const app = express(); //inicializando express
+app.use(cors());
 app.use(express.json());//API vai "entender" que vai receber as respostas em json
 
 app.use(routes)

@@ -1,8 +1,8 @@
-
 exports.up = knex => knex.schema.createTable("products", table => {
-    table.increments("id_products");
+    table.increments("id");
     table.integer("code");
     table.text("name");
+    table.text("description");
     table.text("photo").null;
     table.timestamp("created_at").default(knex.fn.now());
     table.timestamp("updated_at").default(knex.fn.now());
