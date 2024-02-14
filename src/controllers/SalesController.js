@@ -4,18 +4,35 @@ const knex = require("../database/knex");
 
 class SalesController {
     async create(request, response) {
-        const { totalPrice, payment } = request.body;
-        const { client_id } = request;
+        const { totalPrice, payment, products,quantity, price } = request.body;
+        const { client_id } = request.body;
 
         // Verifica se o client_id é válido, por exemplo, se existe na tabela client
         const clientExists = await knex("client").where({ id: client_id }).first();
         if (!clientExists) {
-            throw new AppError("Client not found", 404);
+            throw new AppError("Cliente não encontrado", 404);
         }
 
-        await knex("sales").insert({ totalPrice, payment, client_id });
+        const [sales_id] = await knex("sales").insert({ totalPrice, payment, client_id });
+
+        const itemSales = products.map((product, index) =>{
+            return {
+                sales_id,
+                product,
+                quantity: quantity[index],
+                price: price[index]
+            }
+        })
+
+        await knex("itemSales").insert(itemSales);
 
         return response.status(201).json()
+    }
+
+    async index (request, response) {
+        const sales = await knex("sales")
+    
+        return response.json(sales);
     }
 }
 

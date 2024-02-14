@@ -9,5 +9,6 @@ const salesController = new SalesController();
 salesRoutes.use(ensureAuthenticated);
 
 salesRoutes.post("/", salesController.create)
+salesRoutes.get("/", salesController.index)
 
 module.exports = salesRoutes;
