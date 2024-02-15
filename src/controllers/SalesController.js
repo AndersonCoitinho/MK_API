@@ -15,12 +15,12 @@ class SalesController {
 
         const [sales_id] = await knex("sales").insert({ totalPrice, payment, client_id });
 
-        const itemSales = products.map((product, index) =>{
+        const itemSales = products.map((product) =>{
             return {
                 sales_id,
-                product,
-                quantity: quantity[index],
-                price: price[index]
+                product: product.product,
+                quantity: product.quantity,
+                price: product.price
             }
         })
 
