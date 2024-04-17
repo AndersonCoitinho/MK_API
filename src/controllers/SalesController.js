@@ -4,8 +4,7 @@ const knex = require("../database/knex");
 
 class SalesController {
     async create(request, response) {
-        const { totalPrice, payment, products, quantity, price } = request.body;
-        const { client_id } = request.body;
+        const { client_id, totalPrice, payment, products } = request.body;
 
         // Verifica se o client_id é válido, por exemplo, se existe na tabela client
         const clientExists = await knex("client").where({ id: client_id }).first();
