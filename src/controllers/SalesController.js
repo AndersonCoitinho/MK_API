@@ -5,6 +5,7 @@ const knex = require("../database/knex");
 class SalesController {
     async create(request, response) {
         const { client_id, totalPrice, payment, products } = request.body;
+        const user_id = request.user.id;
 
         // Verifica se o client_id é válido, por exemplo, se existe na tabela client
         const clientExists = await knex("client").where({ id: client_id }).first();
@@ -18,7 +19,7 @@ class SalesController {
             throw new AppError("A quantidade do produto deve ser um número inteiro", 400);
         }
 
-        const [sales_id] = await knex("sales").insert({ totalPrice, payment, client_id });
+        const [sales_id] = await knex("sales").insert({ totalPrice, payment, client_id, user_id });
 
         const itemSales = products.map((product) => {
             return {
@@ -35,7 +36,9 @@ class SalesController {
     }
 
     async index(request, response) {
-        const sales = await knex("sales")
+        const userId = request.user.id;
+
+        const sales = await knex("sales").where({ id_user: userId });
 
         return response.json(sales);
     }

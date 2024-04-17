@@ -5,8 +5,9 @@ const knex = require("../database/knex");
 class BuyController {
     async create(request, response) {
         const { totalPrice, payment, products } = request.body;
+        const user_id = request.user.id;
 
-        const [buy_id] = await knex("buy").insert({ totalPrice, payment });
+        const [buy_id] = await knex("buy").insert({ totalPrice, payment, user_id });
 
         const itemBuy = products.map((product) => {
             return {
