@@ -38,7 +38,7 @@ class SalesController {
     async index(request, response) {
         const userId = request.user.id;
 
-        const sales = await knex("sales").where({ id_user: userId });
+        const sales = await knex("sales").where({ user_id: userId });
 
         return response.json(sales);
     }

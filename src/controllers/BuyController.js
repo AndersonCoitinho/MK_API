@@ -24,7 +24,9 @@ class BuyController {
     }
 
     async index(request, response) {
-        const buy = await knex("buy")
+        const userId = request.user.id;
+
+        const buy = await knex("buy").where({ user_id: userId });
 
         return response.json(buy);
     }
