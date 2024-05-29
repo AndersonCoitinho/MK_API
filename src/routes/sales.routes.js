@@ -10,5 +10,6 @@ salesRoutes.use(ensureAuthenticated);
 
 salesRoutes.post("/", salesController.create)
 salesRoutes.get("/", salesController.index)
+salesRoutes.get('/total', ensureAuthenticated, salesController.getTotalSales);
 
 module.exports = salesRoutes;

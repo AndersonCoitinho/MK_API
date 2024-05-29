@@ -42,6 +42,20 @@ class SalesController {
 
         return response.json(sales);
     }
+
+    async getTotalSales(request, response) {
+        const userId = request.user.id;
+
+        const totalSales = await knex("sales")
+            .where({ user_id: userId })
+            .sum("totalPrice as total");
+
+        if (!totalSales[0].total) {
+            return response.status(200).json({ total: 0 });
+        }
+
+        return response.json({ total: totalSales[0].total });
+    }
 }
 
 module.exports = SalesController;

@@ -9,7 +9,7 @@ const productsController = new ProductsController();
 productsRoutes.use(ensureAuthenticated);
 
 productsRoutes.post("/", productsController.create)
-productsRoutes.post("/:id_products", productsController.update)
+productsRoutes.put("/:id_products", productsController.update)
 productsRoutes.get("/", productsController.index)
 productsRoutes.get("/:code", productsController.show)
 
