@@ -11,5 +11,6 @@ stockRoutes.use(ensureAuthenticated);
 stockRoutes.post("/", stockController.create)
 stockRoutes.put("/:products_id", stockController.update)
 stockRoutes.get("/", stockController.index)
+stockRoutes.get("/:products_id", stockController.show)
 
 module.exports = stockRoutes;

@@ -1,0 +1,18 @@
+INSERT INTO client ( name, id_user ) VALUES
+('Vera', '1'),
+('Genilson', '1'),
+('Nicole', '1'),
+('Rosmari', '1'),
+('Talita', '1'),
+('Abel', '1'),
+('Nayama', '1'),
+('Matheus', '1'),
+('Cris', '1'),
+('Fernanda', '1'),
+('Jocele', '1'),
+('Vó Valdeci', '1'),
+('Rita', '1'),
+('Talita', '1'),
+('Giselly', '1'),
+('Alerson', '1');
+--ate final de fevereiro faltou presente dinda

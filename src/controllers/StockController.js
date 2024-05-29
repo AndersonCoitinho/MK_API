@@ -61,6 +61,14 @@ class StockController {
         return response.json(stock);
     }
 
+    async show (request, response) {
+        const { products_id } = request.params;
+
+        const stock = await knex("stock").where({ products_id }).first();
+        
+        return response.json(stock);
+    }
+
 }
 
 module.exports = StockController;
