@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
-const SalesInstallmentsController = require("../controllers/SalesInstallmentsController");
+const SalesInstallmentsController = require("./SalesInstallmentsController");
 const salesInstallmentsController = new SalesInstallmentsController();
 
 class SalesController {
@@ -15,33 +15,47 @@ class SalesController {
                 throw new AppError("Cliente não encontrado", 404);
             }
 
-            // Insere a venda principal
-            const [sales_id] = await knex("sales").insert({ totalPrice, payment, sale_date, observations, discount, client_id, user_id });
+            // Insere a venda principal e retorna o ID
+            const [insertedSalesId] = await knex("sales").insert({ 
+                totalPrice, payment, sale_date, observations, discount, client_id, user_id 
+            }).returning("id");
+
+            const sales_id = insertedSalesId.id || insertedSalesId; // Garante que sales_id seja um valor numérico
+
+            //console.log("Sales ID:", sales_id); // Adiciona um log para verificar o sales_id
 
             // Insere os itens da venda
             const itemSales = products.map((product) => ({
-                sales_id,
+                sales_id, // Aqui você associa cada item de venda à venda principal
                 product: product.product,
                 quantity: product.quantity,
-                price: product.price
+                price: product.price,
+                user_id
             }));
+
+            //console.log("Item Sales:", itemSales); // Adiciona um log para verificar os itens de venda
+
             await knex("itemSales").insert(itemSales);
 
             // Se houver parcelas a serem criadas
             if (installments && installments.length > 0) {
                 for (const installment of installments) {
-                    await salesInstallmentsController.create({
-                        body: {
+                    try {
+                        const installmentData = {
                             ...installment,
-                            sale_id: sales_id // Passa o sales_id para cada parcela
-                        }
-                    }, response);
+                            sales_id // Passa o sales_id corretamente
+                        };
+                        //console.log("Criando parcela com dados:", installmentData); // Log para verificar os dados da parcela
+                        await salesInstallmentsController.create(installmentData, user_id);
+                    } catch (error) {
+                        console.error("Erro ao criar parcela:", error);
+                    }
                 }
             }
 
             return response.status(201).json({ sales_id });
         } catch (error) {
-            console.error("Erro ao criar venda:", error);
+            //console.error("Erro ao criar venda:", error);
             return response.status(error.statusCode || 500).json({ error: error.message });
         }
     }
