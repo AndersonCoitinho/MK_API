@@ -3,7 +3,7 @@ exports.up = knex => knex.schema.createTable("itemBuy", table => {
     table.integer("buy_id").references("id").inTable("buy");
     table.text("product");
     table.integer("quantity");
-    table.text("price");
+    table.decimal("price", 10, 2);
     table.integer("user_id").references("id").inTable("users");
     table.timestamp("created_at").default(knex.fn.now());
     table.timestamp("updated_at").default(knex.fn.now());

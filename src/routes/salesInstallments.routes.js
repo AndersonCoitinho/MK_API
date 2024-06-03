@@ -10,6 +10,7 @@ salesInstallmentsRoutes.use(ensureAuthenticated);
 
 salesInstallmentsRoutes.get("/:sales_id", salesInstallmentsController.index)
 salesInstallmentsRoutes.get("/", salesInstallmentsController.accountsReceivable);
+salesInstallmentsRoutes.put('/:id', salesInstallmentsController.update);
 
 
 module.exports = salesInstallmentsRoutes;

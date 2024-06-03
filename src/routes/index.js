@@ -8,6 +8,7 @@ const salesRouter = require("./sales.routes")
 const buyRouter = require("./buy.routes")
 const stockRouter = require("./stock.routes")
 const salesInstallmentsRouter = require("./salesInstallments.routes")
+const buyInstallmentsRouter = require("./buyInstallments.routes")
 
 const routes = Router();
 
@@ -19,5 +20,6 @@ routes.use("/sales", salesRouter)
 routes.use("/buy", buyRouter)
 routes.use("/stock", stockRouter)
 routes.use("/salesInstallments", salesInstallmentsRouter)
+routes.use("/buyInstallments", buyInstallmentsRouter)
 
 module.exports = routes;

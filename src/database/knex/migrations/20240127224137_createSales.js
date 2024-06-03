@@ -1,7 +1,7 @@
 exports.up = knex => knex.schema.createTable("sales", table => {
     table.increments("id");
     table.integer("client_id").references("id").inTable("client");
-    table.text("totalPrice");
+    table.decimal("totalPrice", 10, 2);
     table.text("payment");
     table.timestamp("sale_date");
     table.text("observations");

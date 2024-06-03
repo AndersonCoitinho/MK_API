@@ -55,22 +55,41 @@ class SalesInstallmentsController {
 
     async accountsReceivable(request, response) {
         const user_id = request.user.id; // Obtém o user_id do usuário autenticado
-
+    
         try {
-            // Consulta todas as parcelas pendentes do usuário
+            // Consulta todas as parcelas pendentes do usuário, incluindo dados do cliente
             const receivables = await knex("salesInstallments")
                 .join("sales", "salesInstallments.sales_id", "=", "sales.id")
+                .join("client", "sales.client_id", "=", "client.id")
                 .where("sales.user_id", user_id)
                 .andWhere("salesInstallments.status", "pendente")
                 .select(
                     "salesInstallments.id",
                     "salesInstallments.sales_id",
+                    "client.id as client_id",
+                    "client.name as client_name", // Assume que o nome do cliente está na coluna 'name'
                     "salesInstallments.payment_method",
                     "salesInstallments.amount",
-                    "salesInstallments.due_date"
+                    "salesInstallments.due_date",
+                    "salesInstallments.status"
                 );
-
+    
             return response.json({ receivables });
+        } catch (error) {
+            return response.status(400).json({ error: error.message });
+        }
+    }
+
+    async update(request, response) {
+        const { id } = request.params;
+        const { due_date, status } = request.body;
+    
+        try {
+            const updatedInstallment = await knex("salesInstallments")
+                .where({ id })
+                .update({ due_date, status, updated_at: knex.fn.now() });
+    
+            return response.json({ message: "Parcela atualizada com sucesso" });
         } catch (error) {
             return response.status(400).json({ error: error.message });
         }
