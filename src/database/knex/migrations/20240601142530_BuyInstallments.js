@@ -8,8 +8,8 @@ exports.up = knex => knex.schema.createTable("BuyInstallments", table => {
     table.date('due_date').notNullable();
     table.string('status', 50).defaultTo('pendente');
     table.integer("user_id").references("id").inTable("users");
-    table.timestamp("created_at").default(knex.fn.now());
-    table.timestamp("updated_at").default(knex.fn.now());
+    table.timestamp("created_at").defaultTo(knex.fn.now());
+    table.timestamp("updated_at").defaultTo(knex.fn.now());
 });
 
 exports.down = knex => knex.schema.dropTable("BuyInstallments");

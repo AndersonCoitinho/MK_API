@@ -2,7 +2,7 @@ const knex = require("../database/knex");
 
 class SalesInstallmentsController {
     async create(installment, user_id) {
-        const { sales_id, payment_method, amount, due_date, installment_number } = installment;
+        const { sales_id, description, payment_method, amount, due_date, installment_number } = installment;
 
         if (!sales_id || !payment_method || !amount || !due_date || !installment_number) {
             throw new Error("Dados da parcela incompletos");
@@ -11,6 +11,7 @@ class SalesInstallmentsController {
         try {
             const newInstallment = {
                 sales_id,
+                description,
                 payment_method,
                 amount,
                 due_date,
