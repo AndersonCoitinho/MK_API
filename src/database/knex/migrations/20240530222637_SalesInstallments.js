@@ -1,6 +1,7 @@
 exports.up = knex => knex.schema.createTable("SalesInstallments", table => {
     table.increments("id");
     table.integer("sales_id").references("id").inTable("sales");
+    table.text("description");
     table.string('payment_method').notNullable();
     table.integer('installment_number').notNullable();
     table.decimal('amount', 10, 2).notNullable();

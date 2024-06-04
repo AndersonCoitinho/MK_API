@@ -5,13 +5,13 @@ const buyInstallmentsController = new BuyInstallmentsController
 
 class BuyController {
     async create(request, response) {
-        const { invoice, totalPrice, payment, buy_date, observations, products, installments } = request.body;
+        const { invoice, order, totalPrice, payment, buy_date, observations, products, installments } = request.body;
         const user_id = request.user.id;
 
         try {
             // Insere a compra principal e retorna o ID
             const [insertedPurchaseId] = await knex("buy").insert({ 
-                invoice, totalPrice, payment, buy_date, observations, user_id 
+                invoice, order, totalPrice, payment, buy_date, observations, user_id 
             }).returning("id");
 
             const buy_id = insertedPurchaseId.id || insertedPurchaseId; 

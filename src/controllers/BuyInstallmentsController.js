@@ -44,18 +44,21 @@ class BuyInstallmentsController {
         const user_id = request.user.id;
 
         try {
-            const receivables = await knex("BuyInstallments")
-                .join("buy", "BuyInstallments.buy_id", "=", "buy.id")
-                .where("buy.user_id", user_id)
-                .andWhere("BuyInstallments.status", "pendente")
-                .select(
-                    "BuyInstallments.id",
-                    "BuyInstallments.buy_id",
-                    "BuyInstallments.payment_method",
-                    "BuyInstallments.amount",
-                    "BuyInstallments.due_date",
-                    "BuyInstallments.status"
-                );
+            const receivables = await knex("BuyInstallments as bi")
+            .join("buy as b1", "bi.buy_id", "=", "b1.id") // Primeiro join com alias b1
+            .where("b1.user_id", user_id)
+            .andWhere("bi.status", "pendente")
+            .select(
+                "bi.id",
+                "bi.buy_id",
+                "b1.invoice as invoice", // Selecionar o campo invoice da tabela buy com alias b1
+                "b1.order as order",
+                "bi.payment_method",
+                "bi.amount",
+                "bi.due_date",
+                "bi.status",    
+                "bi.description"
+            );
 
             return response.json({ receivables });
         } catch (error) {

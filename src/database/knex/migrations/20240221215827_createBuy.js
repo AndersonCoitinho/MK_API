@@ -1,6 +1,7 @@
 exports.up = knex => knex.schema.createTable("buy", table => {
     table.increments("id");
     table.text("invoice");
+    table.text("order");
     table.decimal("totalPrice", 10, 2);
     table.text("payment");
     table.timestamp("buy_date");
