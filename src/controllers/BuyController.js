@@ -49,6 +49,20 @@ class BuyController {
         }
     }
 
+    async getTotalBuy(request, response) {
+        const userId = request.user.id;
+
+        const totalBuy = await knex("buy")
+            .where({ user_id: userId })
+            .sum("totalPrice as total");
+
+        if (!totalBuy[0].total) {
+            return response.status(200).json({ total: 0 });
+        }
+
+        return response.json({ total: totalBuy[0].total });
+    }
+
     async index(request, response) {
         const userId = request.user.id;
 

@@ -45,6 +45,11 @@ class StockController {
         // Calcula o novo valor da quantidade com base na operação
         const updatedQuantity = currentQuantity + newQuantity;
 
+        // Verifica se a quantidade atualizada seria negativa
+        if (updatedQuantity < 0) {
+            throw new AppError("O estoque não pode ser negativo", 400);
+        }
+
         // Atualiza a quantidade de estoque do produto
         await knex("stock")
             .where({ products_id })
@@ -52,20 +57,20 @@ class StockController {
 
         // Retorna uma resposta de sucesso
         return response.status(200).json();
-
     }
 
-    async index (request, response) {
+
+    async index(request, response) {
         const stock = await knex("stock")
-    
+
         return response.json(stock);
     }
 
-    async show (request, response) {
+    async show(request, response) {
         const { products_id } = request.params;
 
         const stock = await knex("stock").where({ products_id }).first();
-        
+
         return response.json(stock);
     }
 

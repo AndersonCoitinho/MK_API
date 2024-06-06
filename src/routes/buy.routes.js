@@ -10,5 +10,6 @@ buyRoutes.use(ensureAuthenticated);
 
 buyRoutes.post("/", buyController.create)
 buyRoutes.get("/", buyController.index)
+buyRoutes.get("/total", buyController.getTotalBuy)
 
 module.exports = buyRoutes;
