@@ -24,7 +24,7 @@ class ClientController {
     async update(request, response) {
         const userId = request.user.id;
         const { id } = request.params;
-        const { name, address, city, birthday, instagram, telephone, comments } = request.body;
+        const { name, address, city, instagram, telephone, comments } = request.body;
 
         try {
             // Verifica se o cliente existe e pertence ao usuário
@@ -36,7 +36,7 @@ class ClientController {
             // Atualiza os dados do cliente
             await knex("client")
                 .where({ id })
-                .update({ name, address, city, birthday, instagram, telephone, comments });
+                .update({ name, address, city, instagram, telephone, comments });
 
             return response.status(200).json({ message: "Cliente atualizado com sucesso." });
         } catch (error) {

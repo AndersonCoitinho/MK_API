@@ -12,9 +12,9 @@ class BuyController {
             // Insere a compra principal e retorna o ID
             const [insertedPurchaseId] = await knex("buy").insert({ 
                 invoice, order, totalPrice, payment, buy_date, observations, user_id 
-            }).returning("id");
+            });
 
-            const buy_id = insertedPurchaseId.id || insertedPurchaseId; 
+            const buy_id = insertedPurchaseId;
 
             // Insere os itens da compra
             const itemBuys = products.map((product) => ({
@@ -72,6 +72,27 @@ class BuyController {
             return response.json(buys);
         } catch (error) {
             return response.status(500).json({ error: error.message });
+        }
+    }
+
+    async delete(request, response) {
+        const { id } = request.params; 
+        const userId = request.user.id;
+
+        try {
+            // Verifica se a venda existe
+            const buy = await knex("buy").where({ id, user_id: userId }).first();
+            if (!buy) {
+                throw new AppError("Compra não encontrada ou não autorizada para deleção", 404);
+            }
+
+            // Deleta a compra principal
+            await knex("buy").where({ id }).del();
+
+            return response.status(200).json({ message: "Compra deletada com sucesso" });
+        } catch (error) {
+            console.error("Erro ao deletar compra:", error);
+            return response.status(error.statusCode || 500).json({ error: error.message });
         }
     }
 }

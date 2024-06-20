@@ -12,5 +12,6 @@ salesRoutes.post("/", salesController.create)
 salesRoutes.get("/", salesController.index)
 salesRoutes.get('/total', salesController.getTotalSales);
 salesRoutes.get('/clientSales/:id', salesController.getClientSales);
+salesRoutes.delete('/:id', salesController.delete);
 
 module.exports = salesRoutes;

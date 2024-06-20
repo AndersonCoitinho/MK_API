@@ -18,9 +18,9 @@ class SalesController {
             // Insere a venda principal e retorna o ID
             const [insertedSalesId] = await knex("sales").insert({
                 totalPrice, payment, sale_date, observations, discount, client_id, user_id
-            }).returning("id");
+            });
 
-            const sales_id = insertedSalesId.id || insertedSalesId; // Garante que sales_id seja um valor numérico
+            const sales_id = insertedSalesId; 
 
             //console.log("Sales ID:", sales_id); // Adiciona um log para verificar o sales_id
 
@@ -127,6 +127,27 @@ class SalesController {
             return response.json({ clientSales, totalPurchases });
             //return response.json( clientSales );
         } catch (error) {
+            return response.status(error.statusCode || 500).json({ error: error.message });
+        }
+    }
+
+    async delete(request, response) {
+        const { id } = request.params; 
+        const userId = request.user.id;
+        try {
+
+            // Verifica se a venda existe
+            const sale = await knex("sales").where({ id, user_id: userId }).first();
+            if (!sale) {
+                throw new AppError("Venda não encontrada ou não autorizada para deleção", 404);
+            }
+
+            // Deleta a venda principal
+            await knex("sales").where({ id }).del();
+
+            return response.status(200).json({ message: "Venda deletada com sucesso" });
+        } catch (error) {
+            console.error("Erro ao deletar venda:", error);
             return response.status(error.statusCode || 500).json({ error: error.message });
         }
     }
